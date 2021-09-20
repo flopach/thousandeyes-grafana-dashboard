@@ -1,0 +1,41 @@
+# ThousandEyes Grafana Dashboard 1.0
+# CISCO SAMPLE CODE LICENSE Version 1.1, Cisco Systems 2021, flopach
+# Docker Compose file for easily setting up all services
+
+version: '3.8'
+services:
+  influxdb:
+    image: influxdb:2.0.8
+    volumes:
+      - ${PWD}/influxdbv2:/var/lib/influxdb2
+    ports:
+      - "8086:8086"
+  influxdb_setup:
+    image: influxdb:2.0.8
+     #  do NOT edit OR sync parameters with config.py file
+    entrypoint: influx setup --bucket sensordata_bucket -t sensordata_token123 -o sensordata_organization --username=admin --password=admin123 --host=http://influxdb:8086 -f
+      # Wait for the influxd service in the influxdb container has fully bootstrapped before trying to setup an influxdb instance with the influxdb_cli service. 
+    restart: on-failure:15
+  grafana:
+    image: grafana/grafana:8.1.2
+    ports:
+      - '3000:3000'
+    volumes:
+      - ${PWD}/grafana-storage:/var/lib/grafana
+      - ${PWD}/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ${PWD}/provisioning/datasources:/etc/grafana/provisioning/datasources
+    user: "$UID:$GID"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin123
+  py_connector:
+    build: ${PWD}/py_connector/.
+    depends_on: 
+      - grafana
+      - influxdb
+    restart: on-failure
+    environment:
+      - PYTHONUNBUFFERED=0
+volumes:
+  influxdbv2:
+  grafana-storage:
