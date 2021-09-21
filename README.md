@@ -1,13 +1,24 @@
 # ThousandEyes Grafana Dashboard
 
-Extract data from ThousandEyes to InfluxDB + Grafana Dashboard.
+Extract data from ThousandEyes REST API and visualize it on your customized Grafana Dashboard. Deploy Grafana, InfluxDBv2 and the Python connector script within a few minutes.
 
-Currently Supported Tests:
+![](images/te-grafana.png)
 
-* (Web) Page load
-* (Web) HTTP server
-* (Network) End-to-End metrics
-* (Network) Path visualization
+**Supported Functions**
+
+* Get **historic data** (custom time range) and **pull new data** (set your own interval) from your ThousandEyes tests.
+* Grafana, a sample Dashboard and InfluxDBv2 are already pre-configured
+* Currently Supported Tests:
+	* (Web) Page load
+	* (Web) HTTP server
+	* (Network) End-to-End metrics
+	* (Network) Path visualization
+
+**Screenshots**
+
+![](images/grafana-dashboard1.png)
+
+![](images/grafana-dashboard2.png)
 
 ## Installation & Configuration
 
@@ -25,7 +36,7 @@ git clone https://github.com/flopach/thousandeyes-grafana-dashboard.git
 
 2. Configure your environment and insert your credentials into the **docker/py_connector/config.py** file.
 
-3. Start all containers from the docker directory. This may take some minutes.
+3. Start all containers _from_ the docker directory. This may take some minutes.
 
 ```
 docker-compose up
@@ -38,11 +49,21 @@ More useful commands:
 * Build again the containers (when you changed the Python scripts): `docker-compose build`
 
 ### Configure: config.py
-Simply open `docker/py_connector/config.py` in any text-editor and put in the credential data of your ThousandEyes instance.
+Simply open `docker/py_connector/config.py` in any text-editor to set your desired configuration.
+
+* OAuth Bearer Token **(required)**
+* Test types to add to dashboard
+* time window
+* pull interval
+* enabling specific dataset (for demo or specific ThousandEyes testIds)
+
+Example: When you've created a ThousandEyes page-load test (see below), you will receive data from 4 views:
+
+![](images/te-test-ui.png)
 
 ### Configure: Dashboards
 
-Login to Grafana dashboard and configure your dashboard modules by easily inserting the measurement name. Additionally, use the query editor from the InfluxDB UI as a help to copy the Flux language syntax.
+Login to Grafana dashboard and configure your dashboard modules by inserting the ThousandEyes testId. Additionally, use the query editor from the InfluxDB UI as a help to create and copy the Flux language syntax snippet.
 
 Login **Grafana** - [http://localhost:3000](http://localhost:3000)
 
