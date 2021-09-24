@@ -2,7 +2,7 @@
 # CISCO SAMPLE CODE LICENSE Version 1.1, Cisco Systems 2021, flopach
 # Docker Compose file for easily setting up all services
 
-version: '3.8'
+version: '3'
 services:
   influxdb:
     image: influxdb:2.0.8

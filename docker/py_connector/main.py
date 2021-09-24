@@ -19,13 +19,13 @@ def get_tests_by_type():
 
     :return: dictionary, format: { "test-type" : [ list of tests ], "test-type" : [ list of tests ], ... }
     """
-
-    headers = {
-        "Accept": "application/json",
-        "Authorization": "Bearer {}".format(config.oauth_bearer_token)
-    }
-
     try:
+
+        headers = {
+                "Accept": "application/json",
+                "Authorization": "Bearer {}".format(config.oauth_bearer_token)
+            }
+
         all_tests = {}
 
         # Get test details for each test type which is defined in config.py
@@ -57,76 +57,91 @@ def get_tests_by_type():
         
         logging.info(f"Got all test infos of all requested types.")
 
-        with open('tests.json', 'w') as outfile:
-            json.dump(all_tests, outfile)
+        #with open('tests.json', 'w') as outfile:
+        #    json.dump(all_tests, outfile)
 
         return all_tests
 
     except Exception as e:
         logging.exception(f"Error! Could not create all_tests dictionary: {e}")
 
-def get_test_data_insert_to_db(te_tests,te_test_type,parsing_function,window):
+def get_tests_by_label():
     """
-    Get data from TE tests
-
-    :te_tests: list of tests from function get_tests_by_type(). List-Elements: testId, testName, interval
-    :te_test_type: string, path of the API request URL for the specific test (https://developer.thousandeyes.com/v6/test_data/). Example: "web/http-server"
-    :parsing_function: function for parsing the response from TE API
-    :window: time-range, possible values see https://developer.thousandeyes.com/v6/#/timeranges
-
-    :return: None, errors will be shown in the logs
+    Returns a dictionary with of all tests which are tagged with the define label in the config
+    :return: dictionary, format: { "test-type" : [ list of tests ], "test-type" : [ list of tests ], ... }
     """
-
-    headers = {
-        "Accept": "application/json",
-        "Authorization": "Bearer {}".format(config.oauth_bearer_token)
-    }
-
-    # when requesting data periodically, do not use a time window
-    if window == "latest":
-        params = {}
-    else:
-        params = {
-            "window": window
-        }
 
     try:
+        # get groupId of the label to receive testIds
+        label_groupId = _get_groupid_from_label(config.label_name)
 
-        # Iterate through each test which got requested by type. Elements: testId, testName, interval
-        for te_test in te_tests:
+        headers = {
+            "Accept": "application/json",
+            "Authorization": "Bearer {}".format(config.oauth_bearer_token)
+        }
 
-            # request historical metrics for each testId
-            try:
-                insert_to_db = [] #list which will be inserted into InfluxDB
+        all_tests = {}
 
-                r = requests.request('GET', f"{config.base_url}/{te_test_type}/{te_test['testId']}", headers=headers,params=params)
-                resp = r.json()
-                r.raise_for_status()
+        # request details (TestIds etc.) of the label group
+        try:
+            r = requests.request('GET', f"{config.base_url}/groups/{label_groupId}", headers=headers)
+            r.raise_for_status()
+            print(r.json())
 
-                if r.status_code == 200:
-                    logging.info(f"{te_test['testName']}: Getting data...")
-                    insert_to_db.extend(parsing_function(resp,te_test['testId'],te_test['testName']))
+            if r.status_code == 200:
+                logging.info(f"Successfully requested tests for label {config.label_name}.")
 
-                    #pagination
-                    while "next" in resp["pages"]:
-                        logging.info(f"{te_test['testName']}: ...data on next page...")
-                        r = requests.request('GET', resp["pages"]["next"], headers=headers)
-                        resp = r.json()
-                        insert_to_db.extend(parsing_function(resp,te_test['testId'],te_test['testName']))
+                for te_test in r.json()["groups"][0]["tests"]:
+                    test_instance = {
+                        'testId': te_test["testId"],
+                        'testName': te_test["testName"],
+                        'interval': te_test["interval"]
+                    }
 
-                    # add the final list as a batch to influx db
-                    _insert_to_influx_v2(insert_to_db, te_test['testName'])
-
-                else:
-                    logging.warning(f"Response of {te_test['testName']} was not 200.")
-                    
-            except Exception as e:
-                logging.exception(f"Error when getting data from test {te_test['testName']}: {e}")
+                    # if list is not yet created, create one in the except clause
+                    try:
+                        all_tests[te_test["type"]].append(test_instance)
+                    except KeyError:
+                        all_tests[te_test["type"]] = []
+                        all_tests[te_test["type"]].append(test_instance)
         
-        logging.info(f" === Success! Got ALL test data of type {te_test_type}. === ")
+        except Exception as e:
+            logging.exception(f"Error! Could not create all_tests dictionary: {e}")
+        
+        logging.info(f"Got all test infos for label {config.label_name}.")
+
+        #with open('tests.json', 'w') as outfile:
+        #    json.dump(all_tests, outfile)
+
+        return all_tests
 
     except Exception as e:
-        logging.exception(f"Error when iterating through the {te_test_type} tests: {e}")
+        logging.exception(f"Error! Could not create all_tests dictionary: {e}")
+
+def _get_groupid_from_label(label_name):
+    """
+    Returns the groupId for the stated TE label (defined in TE dashboard)
+
+    :return: int, groupId of variable label_name
+    """
+    try:
+
+        headers = {
+            "Accept": "application/json",
+            "Authorization": "Bearer {}".format(config.oauth_bearer_token)
+        }
+
+        r = requests.request('GET', f"{config.base_url}/groups/tests/", headers=headers)
+        r.raise_for_status()
+
+        if r.status_code == 200:
+
+            for group in r.json()["groups"]:
+                if group["name"] == label_name:
+                    return group["groupId"]
+
+    except Exception as e:
+        logging.exception(f"Error! Could not get data for label {label_name}: {e}")
 
 def _insert_to_influx_v2(insert_to_db,te_test):
     """
@@ -412,6 +427,69 @@ def _parse_and_convert_path_vis(resp,testId,testName):
 
     return te_test_dataset_group
 
+def get_test_data_insert_to_db(te_tests,te_test_type,parsing_function,window):
+    """
+    Get data from TE tests
+
+    :te_tests: list of tests from function get_tests_by_type(). List-Elements: testId, testName, interval
+    :te_test_type: string, path of the API request URL for the specific test (https://developer.thousandeyes.com/v6/test_data/). Example: "web/http-server"
+    :parsing_function: function for parsing the response from TE API
+    :window: time-range, possible values see https://developer.thousandeyes.com/v6/#/timeranges
+
+    :return: None, errors will be shown in the logs
+    """
+
+    headers = {
+        "Accept": "application/json",
+        "Authorization": "Bearer {}".format(config.oauth_bearer_token)
+    }
+
+    # when requesting data periodically, do not use a time window
+    if window == "latest":
+        params = {}
+    else:
+        params = {
+            "window": window
+        }
+
+    try:
+
+        # Iterate through each test which got requested by type. Elements: testId, testName, interval
+        for te_test in te_tests:
+
+            # request historical metrics for each testId
+            try:
+                insert_to_db = [] #list which will be inserted into InfluxDB
+
+                r = requests.request('GET', f"{config.base_url}/{te_test_type}/{te_test['testId']}", headers=headers,params=params)
+                resp = r.json()
+                r.raise_for_status()
+
+                if r.status_code == 200:
+                    logging.info(f"{te_test['testName']}: Getting data...")
+                    insert_to_db.extend(parsing_function(resp,te_test['testId'],te_test['testName']))
+
+                    #pagination
+                    while "next" in resp["pages"]:
+                        logging.info(f"{te_test['testName']}: ...data on next page...")
+                        r = requests.request('GET', resp["pages"]["next"], headers=headers)
+                        resp = r.json()
+                        insert_to_db.extend(parsing_function(resp,te_test['testId'],te_test['testName']))
+
+                    # add the final list as a batch to influx db
+                    _insert_to_influx_v2(insert_to_db, te_test['testName'])
+
+                else:
+                    logging.warning(f"Response of {te_test['testName']} was not 200.")
+                    
+            except Exception as e:
+                logging.exception(f"Error when getting data from test {te_test['testName']}: {e}")
+        
+        logging.info(f" === Success! Got ALL test data of type {te_test_type}. === ")
+
+    except Exception as e:
+        logging.exception(f"Error when iterating through the {te_test_type} tests: {e}")
+
 def get_all_http_server_tests(window):
     get_test_data_insert_to_db(all_tests["http-server"],"web/http-server",_parse_and_convert_http_server,window)
     get_test_data_insert_to_db(all_tests["http-server"],"net/metrics",_parse_and_convert_end_to_end,window)
@@ -424,13 +502,12 @@ def get_all_page_load_tests(window):
     get_test_data_insert_to_db(all_tests["page-load"],"net/path-vis",_parse_and_convert_path_vis,window)
 
 if __name__ == "__main__":
-    time.sleep(30) #wait 30 seconds until InfluxDB and Grafana are ready
+    time.sleep(60) #wait until InfluxDB and Grafana are ready
     logging.info(f"Starting! Getting data from TE API.")
 
     # getting all data or just specific?
-    if config.enable_specific_dataset == 1:
-        logging.info(f"Enabling specific dataset.")
-        all_tests = config.specific_dataset
+    if config.enable_label_specific == 1:
+        all_tests = get_tests_by_label()
     else:
         all_tests = get_tests_by_type()
 
