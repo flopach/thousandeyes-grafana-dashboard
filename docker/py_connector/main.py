@@ -86,7 +86,6 @@ def get_tests_by_label():
         try:
             r = requests.request('GET', f"{config.base_url}/groups/{label_groupId}", headers=headers)
             r.raise_for_status()
-            print(r.json())
 
             if r.status_code == 200:
                 logging.info(f"Successfully requested tests for label {config.label_name}.")
