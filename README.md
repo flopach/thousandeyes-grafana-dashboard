@@ -84,7 +84,7 @@ Login **Grafana** - [http://localhost:3000](http://localhost:3000)
 * username: admin
 * password: admin123
 
-Login **InfluxDB** - [http://localhost:8086](http://localhost:3000)
+Login **InfluxDB** - [http://localhost:8086](http://localhost:8086)
 
 * username: admin
 * password: admin123
