@@ -121,6 +121,8 @@ docker-compose build
 
 **1.0** (Sep 2021) - Initial version
 
+**1.0.1** (Dec 2021) - Bugfix: You can now add only one test type which is tagged. config.py Update.
+
 ## License
 
 This project is licensed under the Cisco Samplel Code License 1.1 - see the [LICENSE.md](LICENSE.md) file for details

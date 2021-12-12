@@ -1,4 +1,4 @@
-# ThousandEyes Grafana Dashboard 1.0
+# ThousandEyes Grafana Dashboard 1.0.1
 # CISCO SAMPLE CODE LICENSE Version 1.1, Cisco Systems 2021, flopach
 
 import config
@@ -86,7 +86,6 @@ def get_tests_by_label():
         try:
             r = requests.request('GET', f"{config.base_url}/groups/{label_groupId}", headers=headers)
             r.raise_for_status()
-            print(r.json())
 
             if r.status_code == 200:
                 logging.info(f"Successfully requested tests for label {config.label_name}.")
@@ -108,11 +107,7 @@ def get_tests_by_label():
         except Exception as e:
             logging.exception(f"Error! Could not create all_tests dictionary: {e}")
         
-        logging.info(f"Got all test infos for label {config.label_name}.")
-
-        #with open('tests.json', 'w') as outfile:
-        #    json.dump(all_tests, outfile)
-
+        logging.info(f"Pulling data from these tests: {all_tests}.")
         return all_tests
 
     except Exception as e:
@@ -502,7 +497,7 @@ def get_all_page_load_tests(window):
     get_test_data_insert_to_db(all_tests["page-load"],"net/path-vis",_parse_and_convert_path_vis,window)
 
 if __name__ == "__main__":
-    time.sleep(60) #wait until InfluxDB and Grafana are ready
+    #time.sleep(60) #wait until InfluxDB and Grafana are ready
     logging.info(f"Starting! Getting data from TE API.")
 
     # getting all data or just specific?
@@ -511,15 +506,24 @@ if __name__ == "__main__":
     else:
         all_tests = get_tests_by_type()
 
-    # historic data
-    get_all_http_server_tests(config.window)
-    get_all_page_load_tests(config.window)
+    # get historic data only if they are specified
+    if "http-server" in all_tests:
+        get_all_http_server_tests(config.window)
+    
+    if "page-load" in all_tests:
+        get_all_page_load_tests(config.window)
 
     logging.info(" === Success! Got ALL HISTORIC test data. Pulling new data now... === ")
 
     # endless loop for pulling new data every x seconds
     while True:
         time.sleep(config.interval)
-        get_all_http_server_tests("latest")
-        get_all_page_load_tests("latest")
+
+        # get new data only if they are specified
+        if "http-server" in all_tests:
+            get_all_http_server_tests("latest")
+
+        if "page-load" in all_tests:
+            get_all_page_load_tests("latest")
+
         logging.info(f"Pulled new data.")
