@@ -21,7 +21,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 2,
+  "id": 1,
+  "iteration": 1632719777111,
   "links": [],
   "panels": [
     {
@@ -98,7 +99,7 @@
       },
       "targets": [
         {
-          "query": "from(bucket: \"sensordata_bucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"2236549\")\n  |> filter(fn: (r) => r[\"_field\"] == \"domLoadTime\")\n  |> group(columns: [\"agentName\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"mean\")",
+          "query": "from(bucket: \"sensordata_bucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"${testID}\")\n  |> filter(fn: (r) => r[\"_field\"] == \"domLoadTime\")\n  |> group(columns: [\"agentName\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"mean\")",
           "refId": "A"
         }
       ],
@@ -179,7 +180,7 @@
       },
       "targets": [
         {
-          "query": "from(bucket: \"sensordata_bucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"2236549\")\n  |> filter(fn: (r) => r[\"_field\"] == \"pageLoadTime\")\n  |> group(columns: [\"agentName\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"mean\")",
+          "query": "from(bucket: \"sensordata_bucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"${testID}\")\n  |> filter(fn: (r) => r[\"_field\"] == \"pageLoadTime\")\n  |> group(columns: [\"agentName\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"mean\")",
           "refId": "A"
         }
       ],
@@ -260,7 +261,7 @@
       },
       "targets": [
         {
-          "query": "from(bucket: \"sensordata_bucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"2236549\")\n  |> filter(fn: (r) => r[\"_field\"] == \"responseTime\")\n  |> group(columns: [\"agentName\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"mean\")",
+          "query": "from(bucket: \"sensordata_bucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"${testID}\")\n  |> filter(fn: (r) => r[\"_field\"] == \"responseTime\")\n  |> group(columns: [\"agentName\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"mean\")",
           "refId": "A"
         }
       ],
@@ -312,7 +313,7 @@
       "pluginVersion": "8.1.2",
       "targets": [
         {
-          "query": "from(bucket: \"sensordata_bucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"2236549\")\n  |> filter(fn: (r) => r[\"_field\"] == \"dnsTime\" or r[\"_field\"] == \"sslTime\" or r[\"_field\"] == \"waitTime\" or r[\"_field\"] == \"connectTime\")\n  |> group(columns: [\"_field\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"mean\")",
+          "query": "from(bucket: \"sensordata_bucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"${testID}\")\n  |> filter(fn: (r) => r[\"_field\"] == \"dnsTime\" or r[\"_field\"] == \"sslTime\" or r[\"_field\"] == \"waitTime\" or r[\"_field\"] == \"connectTime\")\n  |> group(columns: [\"_field\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"mean\")",
           "refId": "A"
         }
       ],
@@ -393,7 +394,7 @@
       },
       "targets": [
         {
-          "query": "from(bucket: \"sensordata_bucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"2236549\")\n  |> filter(fn: (r) => r[\"_field\"] == \"responseCode\")\n  |> group(columns: [\"agentName\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"mean\")",
+          "query": "from(bucket: \"sensordata_bucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"78970\")\n  |> filter(fn: (r) => r[\"_field\"] == \"responseCode\")\n  |> group(columns: [\"agentName\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"mean\")",
           "refId": "A"
         }
       ],
@@ -450,7 +451,7 @@
       },
       "targets": [
         {
-          "query": "from(bucket: \"sensordata_bucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"2236549\")\n  |> filter(fn: (r) => r[\"_field\"] == \"totalTime\")\n  |> group(columns: [\"agentName\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"mean\")",
+          "query": "from(bucket: \"sensordata_bucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"${testID}\")\n  |> filter(fn: (r) => r[\"_field\"] == \"totalTime\")\n  |> group(columns: [\"agentName\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"mean\")",
           "refId": "A"
         }
       ],
@@ -528,7 +529,7 @@
       },
       "targets": [
         {
-          "query": "from(bucket: \"sensordata_bucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"2236549\")\n  |> filter(fn: (r) => r[\"_field\"] == \"avgLatency\")\n  |> group(columns: [\"agentName\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"mean\")",
+          "query": "from(bucket: \"sensordata_bucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"${testID}\")\n  |> filter(fn: (r) => r[\"_field\"] == \"avgLatency\")\n  |> group(columns: [\"agentName\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"mean\")",
           "refId": "A"
         }
       ],
@@ -608,7 +609,7 @@
       "pluginVersion": "8.1.2",
       "targets": [
         {
-          "query": "from(bucket: \"sensordata_bucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"2236549\")\n  |> filter(fn: (r) => r[\"_field\"] == \"loss\")\n  |> group(columns: [\"agentName\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"mean\")",
+          "query": "from(bucket: \"sensordata_bucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"${testID}\")\n  |> filter(fn: (r) => r[\"_field\"] == \"loss\")\n  |> group(columns: [\"agentName\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"mean\")",
           "refId": "A"
         }
       ],
@@ -660,10 +661,10 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "8.1.2",
+      "pluginVersion": "8.1.5",
       "targets": [
         {
-          "query": "from(bucket: \"sensordata_bucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"2236549\")\n  |> filter(fn: (r) => r[\"_field\"] == \"avg_numberOfHops\")\n  |> group(columns: [\"agentName\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"mean\")",
+          "query": "from(bucket: \"sensordata_bucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"${testID}\")\n  |> filter(fn: (r) => r[\"_field\"] == \"avg_numberOfHops\")\n  |> group(columns: [\"agentName\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"mean\")",
           "refId": "A"
         }
       ],
@@ -741,7 +742,7 @@
       },
       "targets": [
         {
-          "query": "from(bucket: \"sensordata_bucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"2236549\")\n  |> filter(fn: (r) => r[\"_field\"] == \"jitter\")\n  |> group(columns: [\"agentName\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"mean\")",
+          "query": "from(bucket: \"sensordata_bucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"${testID}\")\n  |> filter(fn: (r) => r[\"_field\"] == \"jitter\")\n  |> group(columns: [\"agentName\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"mean\")",
           "refId": "A"
         }
       ],
@@ -793,10 +794,10 @@
         "showThresholdMarkers": true,
         "text": {}
       },
-      "pluginVersion": "8.1.2",
+      "pluginVersion": "8.1.5",
       "targets": [
         {
-          "query": "from(bucket: \"sensordata_bucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"2236549\")\n  |> filter(fn: (r) => r[\"_field\"] == \"avg_responseTime\")\n  |> group(columns: [\"agentName\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"mean\")",
+          "query": "from(bucket: \"sensordata_bucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"${testID}\")\n  |> filter(fn: (r) => r[\"_field\"] == \"avg_responseTime\")\n  |> group(columns: [\"agentName\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"mean\")",
           "refId": "A"
         }
       ],
@@ -809,7 +810,32 @@
   "style": "dark",
   "tags": [],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "allValue": null,
+        "current": {
+          "selected": false,
+          "text": "",
+          "value": ""
+        },
+        "datasource": null,
+        "definition": "import \"influxdata/influxdb/v1\"\nv1.measurements(bucket: v.bucket)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": "TEST ID",
+        "multi": false,
+        "name": "testID",
+        "options": [],
+        "query": "import \"influxdata/influxdb/v1\"\nv1.measurements(bucket: v.bucket)",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
   },
   "time": {
     "from": "now-24h",
@@ -819,5 +845,5 @@
   "timezone": "browser",
   "title": "Thousand Eyes Grafana Dashboard",
   "uid": "7myIGMNnk",
-  "version": 10
+  "version": 3
 }
