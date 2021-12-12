@@ -518,7 +518,6 @@ if __name__ == "__main__":
     # endless loop for pulling new data every x seconds
     while True:
         time.sleep(config.interval)
-<<<<<<< HEAD
 
         # get new data only if they are specified
         if "http-server" in all_tests:
@@ -527,9 +526,4 @@ if __name__ == "__main__":
         if "page-load" in all_tests:
             get_all_page_load_tests("latest")
 
-        logging.info(f"Pulled new data.")
-=======
-        get_all_http_server_tests("latest")
-        get_all_page_load_tests("latest")
-        logging.info(f"Pulled new data.")
->>>>>>> a51b69b14a2357a9022d481cfbebe3affb5a780e
+        logging.info("Pulled new data.")
