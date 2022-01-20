@@ -16,7 +16,7 @@ oauth_bearer_token = "" # Insert OAuth Bearer Token
 # 1 = add ALL test types as stated in test_types AND which are TAGGED with the stated label_name
 # Create your test label at https://app.thousandeyes.com/settings/tests/?tab=labels
 enable_label_specific = 1 #change to 1 or 0
-label_name = "mylabel" #case sensitive!
+label_name = "grafana" #case sensitive!
 
 
 ### Define test types which should be added
