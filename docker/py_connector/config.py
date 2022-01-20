@@ -9,8 +9,7 @@
 # ================================= #
 
 base_url = "https://api.thousandeyes.com/v6" # define API base URL and API version
-#oauth_bearer_token = "62d3ea54-b962-468c-b742-f78f59b8e1ef" # Insert OAuth Bearer Token
-oauth_bearer_token = "xxxxxxxx"
+oauth_bearer_token = "" # Insert OAuth Bearer Token
 
 ### 2 Options: py_connector will ADD tests based on this input from your ThousandEyes dashboard:
 # 0 = add ALL test types as stated in test_types 
