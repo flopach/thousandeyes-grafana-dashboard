@@ -9,14 +9,15 @@
 # ================================= #
 
 base_url = "https://api.thousandeyes.com/v6" # define API base URL and API version
-oauth_bearer_token = "" # Insert OAuth Bearer Token
+#oauth_bearer_token = "62d3ea54-b962-468c-b742-f78f59b8e1ef" # Insert OAuth Bearer Token
+oauth_bearer_token = "xxxxxxxx"
 
 ### 2 Options: py_connector will ADD tests based on this input from your ThousandEyes dashboard:
 # 0 = add ALL test types as stated in test_types 
 # 1 = add ALL test types as stated in test_types AND which are TAGGED with the stated label_name
 # Create your test label at https://app.thousandeyes.com/settings/tests/?tab=labels
 enable_label_specific = 1 #change to 1 or 0
-label_name = "grafana" #case sensitive!
+label_name = "mylabel" #case sensitive!
 
 
 ### Define test types which should be added
@@ -25,6 +26,8 @@ label_name = "grafana" #case sensitive!
 # http-server includes: (Web) HTTP server, (Network) End-to-End metrics, (Network) Path visualization
 # More information: https://developer.thousandeyes.com/v6/test_data/
 test_types = [ "page-load",
+               "agent-to-agent",
+               "agent-to-server",
                "http-server"]
 
 

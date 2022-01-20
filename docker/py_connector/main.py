@@ -496,6 +496,14 @@ def get_all_page_load_tests(window):
     get_test_data_insert_to_db(all_tests["page-load"],"net/metrics",_parse_and_convert_end_to_end,window)
     get_test_data_insert_to_db(all_tests["page-load"],"net/path-vis",_parse_and_convert_path_vis,window)
 
+def get_all_agent_server_tests(window):
+    get_test_data_insert_to_db(all_tests["agent-to-server"],"net/metrics",_parse_and_convert_end_to_end,window)
+    get_test_data_insert_to_db(all_tests["agent-to-server"],"net/path-vis",_parse_and_convert_path_vis,window)
+
+def get_all_agent_agent_tests(window):
+    get_test_data_insert_to_db(all_tests["agent-to-agent"],"net/metrics",_parse_and_convert_end_to_end,window)
+    get_test_data_insert_to_db(all_tests["agent-to-agent"],"net/path-vis",_parse_and_convert_path_vis,window)
+
 if __name__ == "__main__":
     #time.sleep(60) #wait until InfluxDB and Grafana are ready
     logging.info(f"Starting! Getting data from TE API.")
@@ -513,6 +521,12 @@ if __name__ == "__main__":
     if "page-load" in all_tests:
         get_all_page_load_tests(config.window)
 
+    if "agent-to-server" in all_tests:
+        get_all_agent_server_tests(config.window)
+
+    if "agent-to-agent" in all_tests:
+        get_all_agent_agent_tests(config.window)
+
     logging.info(" === Success! Got ALL HISTORIC test data. Pulling new data now... === ")
 
     # endless loop for pulling new data every x seconds
@@ -525,5 +539,11 @@ if __name__ == "__main__":
 
         if "page-load" in all_tests:
             get_all_page_load_tests("latest")
+
+        if "agent-to-server" in all_tests:
+           get_all_agent_server_tests("latest")
+
+        if "agent-to-agent" in all_tests:
+           get_all_agent_agent_tests("latest")
 
         logging.info("Pulled new data.")
