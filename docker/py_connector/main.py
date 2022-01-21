@@ -505,7 +505,7 @@ def get_all_agent_agent_tests(window):
     get_test_data_insert_to_db(all_tests["agent-to-agent"],"net/path-vis",_parse_and_convert_path_vis,window)
 
 if __name__ == "__main__":
-    #time.sleep(60) #wait until InfluxDB and Grafana are ready
+    time.sleep(60) #wait until InfluxDB and Grafana are ready
     logging.info(f"Starting! Getting data from TE API.")
 
     # getting all data or just specific?
