@@ -25,6 +25,8 @@ label_name = "grafana" #case sensitive!
 # http-server includes: (Web) HTTP server, (Network) End-to-End metrics, (Network) Path visualization
 # More information: https://developer.thousandeyes.com/v6/test_data/
 test_types = [ "page-load",
+               "agent-to-agent",
+               "agent-to-server",
                "http-server"]
 
 
